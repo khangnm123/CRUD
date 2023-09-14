@@ -31,15 +31,24 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/fontawesome',
+    
   ],
-
+  fontawesome: {
+    components: 'Fa',
+    suffix:false,
+       icons: {
+         solid: true,
+         brands:true
+    }
+  },
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
-    'vue3-carousel-nuxt'
-      
+    'vue3-carousel-nuxt',
+    'nuxt-icon'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

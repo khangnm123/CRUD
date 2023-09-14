@@ -2,6 +2,7 @@
   <div class="wallpaper">
     <Header/>
         <Nuxt />
+        
     <Footer/>
   </div>
   
