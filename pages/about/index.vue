@@ -16,10 +16,10 @@
  
         </b-card-text>
 
-        <b-button href="#" class="btn" variant="outline-primary">Go somewhere</b-button>
+        <b-button :href="'/' + userData[index].slug" class="btn" variant="outline-primary">Go somewhere</b-button>
       </b-card>
                 </div>
-                 <div v-if="commentsToShow < userData.length || userData.length > commentsToShow">
+                 <div v-if="commentsToShow < userData.length || userData.length > commentsToShow"> <!-- nếu 0 < chiều dài của mảng Userdata thì += 2 -->
         <button class="btn btn-primary" @click="commentsToShow += 2">show more reviews</button>
       </div>
         </div>
@@ -36,14 +36,21 @@ margin: 30px 0px;
 </style>
 <script>
 const axios = require('axios');
+import blog from '../../components/AddBlog/blog.vue';
 export default {
+    
     name: 'IndexPage',
+    components: {
+        blog
+    },
+
     data() {
         return {
+            blognew:'',
             search:'',
             userData: [],
-            commentsToShow: 3,
-            totalComments: 0
+            commentsToShow: 3, // xuất ra 3 phần tử
+            totalComments: 0 // tổng là 0
         };
     },
     created() {
@@ -61,7 +68,7 @@ export default {
         },
     },
       mounted() {
-        this.totalComments = this.userData.length
+        this.totalComments = this.userData.length //duyệt chiều dài của mảng
         console.log(this.userData.length)
     }
 };

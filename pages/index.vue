@@ -1,7 +1,12 @@
 <template>
+
   <div class="container">
-    <input type="text" v-model="search" placeholder="search title" class="form-control mr-sm-2">
-    <b-card no-body class="overflow-hidden mb-3" v-for="(item, index) in postListens" :key="index">
+    <h1 style="text-align: center; font-weight: bold;" >Page Blog</h1>
+    <!-- nhận props edit từ blog.vue -->
+    <blog :edit="blognew" @save="clickAdd"/> 
+    <input type="text" :v-model="search" placeholder="search title" class="form-control mr-sm-2"> 
+    <!-- v-for in ra dữ liệu từ data -->
+    <b-card no-body class="overflow-hidden mb-3" v-for="(item, index) in postListens" :key="index.id"> 
       <b-row no-gutters>
         <b-col md="2">
           <nuxt-link :to="'/' + item.slug">
@@ -14,6 +19,14 @@
               {{ item.content }}
             </b-card-text>
           </b-card-body>
+             <div class="butt_add">
+                <button v-b-modal.modal-prevent-closing  class="btn btn-warning" @click="clickEdit(item)">
+                    Edit
+                </button>
+                <button @click="clickDelete(item)" class="btn btn-danger">
+                    Delete
+                </button>
+              </div>
         </b-col>
       </b-row>
     </b-card>
@@ -21,13 +34,18 @@
 </template>
   
 <script>
+import blog from '../components/AddBlog/blog.vue'
 export default {
   name: 'IndexPage',
+  components: {
+    blog
+  },
+ 
   data() {
     return {
+      blognew:{}, //chứa 1 chuỗi mới
       search:'',
-      postList: [],
-      url_media: "https://cdn.codegym.vn/wp-content/uploads/"
+      postList: [],//mảng rổng 
     };
   },
  
@@ -38,21 +56,40 @@ export default {
     async getPost() {
       try {
         const axios = await import('axios');
-        const response = await axios.get(`http://localhost:8000/api/v1/users`);
+        const response = await axios.get(`http://localhost:8000/api/v1/users`); //fetch dữ liệu
         this.postList = response.data.data;
-        console.log();
       } catch (error) {
         console.log(error);
       }
     },
     navigateToPost(slug) {
-      this.$router.push('/' + slug);
+      this.$router.push('/' + slug); //push qua truong _slug.vue
     },
+    clickAdd(item) {
+      let index = this.postList.findIndex((e) => e.id === item.id); // thêm phần tử
+      if (index >= 0) {
+        this.postList.splice(index , 1 , item) //spilce: thay thế 1 phần tử trong mảng thành phần tử khác 
+      } else {
+        this.postList.push(item)
+      }
+      return 
+    },
+    clickDelete(itemDelete) {
+      console.log(itemDelete);
+      for (let i = 0; i < this.postList.length; i++){ // xóa phần tử
+        if (itemDelete.id === this.postList[i].id) {
+            this.postList.splice(i , 1) //spilce: thay thế 1 phần tử trong mảng thành phần tử khác && đưa lên vị trí 1 
+        }
+      }
+    },
+    clickEdit(itemEdit) { // chỉnh sửa phần tử
+      this.blognew = itemEdit;
+    }
   },
   computed: {
     postListens() {
-      return this.postList.filter(item => {
-       return item.title.toLowerCase().includes(this.search.toLowerCase())
+      return this.postList.filter(item => { // filter: Bộ lộc
+       return item.title.toLowerCase().includes(this.search.toLowerCase()) // includes : dùng để xem một chuỗi ký tự có một ký tự hoặc 1 chuỗi nào đó hay không
       })
     }
   },

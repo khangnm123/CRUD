@@ -1,10 +1,10 @@
 <template>
         <div class="TitleContainer">
                 <div class="single-content">
-                        <h1 class="text-center" style="color: brown;">{{ combinedContent }}</h1>
-                        <span>Ngày đăng: {{ combinedDate }}</span>
+                        <h1 class="text-center" style="color: brown;">{{ title }}</h1>
+                        <span>Ngày đăng: {{ date }}</span>
                         <hr>
-                        <div class="single-content" v-html="combinedText"></div>
+                        <div class="single-content" v-html="content"></div>
                 </div>
         </div>
 </template>
@@ -16,13 +16,13 @@ export default {
         data() {
                 return {
                         postList: null,
-                        combinedContent: "",
-                        combinedDate: "",
-                        combinedText: "",
+                        title: "",
+                        date: "",
+                        content: "",
                 };
         },
         mounted() {
-                this.getPost(this.$route.params.slug);
+                this.getPost(this.$route.params.slug); // đoạn route khớp với phân đoạn thì giá trị được hiển thị bởi params.slug
         },
         methods: {
                 async getPost(slug) {
@@ -33,9 +33,9 @@ export default {
                                 // Kiểm tra nếu có ít nhất một phần tử trong mảng
                                 if (postData.length > 0) {
                                         const post = postData[0];
-                                        this.combinedContent = post.title;
-                                        this.combinedDate = post.date;
-                                        this.combinedText = post.content;
+                                        this.title = post.title;
+                                        this.date= post.date;
+                                        this.content = post.content;
                                 }
                                 console.log(this.$route.params.slug);
                         } catch (error) {
